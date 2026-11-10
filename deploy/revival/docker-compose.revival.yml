@@ -1,4 +1,5 @@
 # Override for running the historic Video Score stack (milestone M0).
+#   export HOST_UID=$(id -u) HOST_GID=$(id -g)
 #   docker compose -f docker-compose.yml -f deploy/revival/docker-compose.revival.yml up --build
 # Media and database live in ./data (git-ignored); put test videos into ./data/movies.
 services:
@@ -6,6 +7,8 @@ services:
     build: { context: ., dockerfile: deploy/revival/server.Dockerfile }
   bibbox-video-score-celery:
     build: { context: ., dockerfile: deploy/revival/server.Dockerfile }
+    # upstream runs as "nobody", which cannot write into a Linux bind mount
+    user: "${HOST_UID:-1000}:${HOST_GID:-1000}"
   bibbox-video-score-celery-monitor:
     build: { context: ., dockerfile: deploy/revival/server.Dockerfile }
     # upstream passes "-celery A ..." which flower cannot parse
