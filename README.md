@@ -23,6 +23,14 @@ uv run seqcarto analyze video.mp4 --end 180        # only the first 3 minutes
 
 Options: `-o/--output` (default `./output`), `-t/--threshold` (default 35), `-m/--min-scene-len` in frames (default 25), `-q/--quiet`.
 
+## Viewer
+
+```bash
+uv run seqcarto view            # opens http://127.0.0.1:8765/
+```
+
+The viewer lists every analyzed video in `./output`. For each one it shows the video player, a slit-scan timeline of the whole video with scene cuts, and all OM images. Clicking the timeline or an OM image jumps the video to that moment; ↑/↓ steps through scenes. Playback in the browser needs an MP4/WebM source; other formats such as AVI still show all images.
+
 ## Output
 
 ```

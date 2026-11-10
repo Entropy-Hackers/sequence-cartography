@@ -74,6 +74,7 @@ def analyze(
             "title": source.title,
             "url": source.url,
             "file": source.path.name,
+            "path": str(source.path),
             "fps": fps,
             "width": info.width,
             "height": info.height,
