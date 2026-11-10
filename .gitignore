@@ -21,6 +21,19 @@ output/
 *.webm
 *.omimagedata/
 
+*.jpg
+*.png
+!docs/**/*.jpg
+!docs/**/*.png
+get-pip.py
+
+# Secrets
+.env
+.env.*
+*.pem
+*.key
+cookies.txt
+
 # Editors and OS
 .idea/
 .vscode/

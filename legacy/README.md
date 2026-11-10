@@ -10,4 +10,6 @@ This is the original VIDEO-ANALYZER code, kept unchanged for reference. It does 
 | `omimages/test-edgededection.py` | Experiment: detecting cuts in stripe images with Canny/Hough |
 | `omimages/readFromYoutube.py`, `ty.py` | YouTube streaming tests (pafy) |
 | `omimages/scenes.csv` | Example scene list (start frame, end frame) |
-| `omimages/omimagetest.jpg` | Example OM image |
+| `scenes/<video>/_scenes.csv` | Scene lists the prototype produced for the original test videos (start frame, end frame), kept as reference data for regression |
+
+The test videos and the generated images are not included. They are large, and most of them come from third-party footage.
