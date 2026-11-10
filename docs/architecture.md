@@ -136,3 +136,23 @@ legacy/              Prototyp 2018/19
 3. **Client**: das Angular-9-Projekt per `ng update` stufenweise hochziehen (9 → 20, viele Zwischenschritte) oder ein neues Angular-Projekt anlegen und die Komponenten übertragen. Empfehlung: neu anlegen und übertragen. Das alte Projekt bleibt bis M2 als Referenz lauffähig.
 4. **API-Framework**: Flask beibehalten, wie der Bauauftrag verlangt. FastAPI wäre die Alternative.
 5. **Demo-Material**: selbst erzeugte oder frei lizenzierte Videos, RNA, Libretto und Partitur. Die alten Testfilme (kommerzielle Spielfilme) dürfen nicht ins Repo und nicht in die Demo.
+
+## 7. Erweiterungen, die die Architektur offenhalten muss
+
+- **Online-Videos als Sequenz** (z. B. YouTube): als eigener **Connector** im Import (Abschnitt 5 des Bauauftrags), getrennt vom Video-Importer. Der Connector liefert eine Datei, danach läuft derselbe Video-Pfad. Wenn nur eine Referenz möglich ist, wird das als Status sichtbar gemacht.
+- **Token-Sequenzen** (z. B. Tokenfolgen von Sprachmodellen): eigenes Profil mit ganzzahligem Token-Index als Koordinate. Zeichen sind die Token-Texte, dazu optionale Spuren (Logprobs, Attention-Werte, Rollen) als Features. Das gemeinsame Modell (Position, Platzierung, Tag, Feature) trägt das ohne Änderung. Nötig sind nur ein Importer und ein Renderer.
+- Weitere Profile kommen nach demselben Muster dazu: Importer, Validierung, Adressformat, Renderer in mehreren Detailstufen.
+
+## 8. Hintergrundverarbeitung
+
+Empfehlung: **Celery 5** mit Redis, getrennte Queues je Worker-Image (`video`, `text`, `sequence`, `music`). Der Zustand eines Auftrags liegt in unserer eigenen Tabelle `AnalysisRun` (wartet, läuft, bereit, mit Hinweisen, fehlgeschlagen, abgebrochen) und nicht im Celery-Result-Backend. Fortschritt geht über Redis-Pub/Sub als SSE an den Client. So bleibt der Task-Runner austauschbar.
+
+Alternativen, die geprüft wurden:
+
+| Werkzeug | Eigenschaft | Bewertung |
+|---|---|---|
+| Celery 5 | Standard, Routing auf Queues, Abbruch, Flower | passt, schwergewichtige Konfiguration |
+| Dramatiq | schlanker, zuverlässige Wiederholungen | gute Alternative |
+| Procrastinate | Queue in PostgreSQL, Einreihen in derselben Transaktion wie die Revision | interessant für Idempotenz, ein Dienst weniger |
+| arq, Taskiq | asyncio-basiert | eher für viele kurze I/O-Jobs, nicht für lange Videoanalysen |
+| Temporal, Hatchet | dauerhafte Workflows | für den Anfang zu schwer |

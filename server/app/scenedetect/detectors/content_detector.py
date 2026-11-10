@@ -89,10 +89,10 @@ class ContentDetector(SceneDetector):
 
             else:
                 num_pixels = frame_img.shape[0] * frame_img.shape[1]
-                curr_hsv = cv2.split(cv2.cvtColor(frame_img, cv2.COLOR_BGR2HSV))
+                curr_hsv = list(cv2.split(cv2.cvtColor(frame_img, cv2.COLOR_BGR2HSV)))
                 last_hsv = self.last_hsv
                 if not last_hsv:
-                    last_hsv = cv2.split(cv2.cvtColor(self.last_frame, cv2.COLOR_BGR2HSV))
+                    last_hsv = list(cv2.split(cv2.cvtColor(self.last_frame, cv2.COLOR_BGR2HSV)))
 
                 delta_hsv = [0, 0, 0, 0]
                 for i in range(3):
