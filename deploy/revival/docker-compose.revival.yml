@@ -1,0 +1,12 @@
+# Override for running the historic Video Score stack (milestone M0).
+#   docker compose -f docker-compose.yml -f deploy/revival/docker-compose.revival.yml up --build
+# Media and database live in ./data (git-ignored); put test videos into ./data/movies.
+services:
+  bibbox-video-score-server:
+    build: { context: ., dockerfile: deploy/revival/server.Dockerfile }
+  bibbox-video-score-celery:
+    build: { context: ., dockerfile: deploy/revival/server.Dockerfile }
+  bibbox-video-score-celery-monitor:
+    build: { context: ., dockerfile: deploy/revival/server.Dockerfile }
+    # upstream passes "-celery A ..." which flower cannot parse
+    command: ["-A", "celery_worker.app_celerey", "--port=5555", "--broker=redis://redis:6379/0"]
