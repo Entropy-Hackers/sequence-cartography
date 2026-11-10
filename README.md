@@ -10,9 +10,40 @@ For every detected scene it renders an **OM image**, a composite overview made o
 
 Sources can be local video files or online videos.
 
-## Status
+## Quick start
 
-The project is being restarted. The original 2018/19 prototype (Python + OpenCV + PySceneDetect) is kept for reference in [`legacy/`](legacy/).
+Requires [uv](https://docs.astral.sh/uv/).
+
+```bash
+uv sync
+uv run seqcarto analyze path/to/video.mp4          # local file
+uv run seqcarto analyze https://youtu.be/<id>      # online video (downloaded via yt-dlp)
+uv run seqcarto analyze video.mp4 --end 180        # only the first 3 minutes
+```
+
+Options: `-o/--output` (default `./output`), `-t/--threshold` (default 35), `-m/--min-scene-len` in frames (default 25), `-q/--quiet`.
+
+## Output
+
+```
+output/<video>/
+  manifest.json        source info, parameters, scenes with timecodes and frame indices
+  scenes.csv           index, start_frame, end_frame, start_time, end_time
+  omimages/scene_00000.jpg …
+  stripes/stripe_00000.jpg …   slit-scan of the whole video, 1500 frames per tile
+```
+
+The video is read twice, both times sequentially: once for scene detection (PySceneDetect `ContentDetector`) and once to render all OM images. Frames are never sought.
+
+## Development
+
+```bash
+uv run pytest
+```
+
+## History
+
+The original 2018/19 prototype is kept for reference in [`legacy/`](legacy/).
 
 ## License
 

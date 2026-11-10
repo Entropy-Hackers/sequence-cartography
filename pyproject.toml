@@ -1,0 +1,30 @@
+[project]
+name = "seqcarto"
+version = "0.1.0"
+description = "Map a video into scenes and OM overview images"
+readme = "README.md"
+authors = [
+    { name = "lomadi", email = "lomadi@mac.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.5.4",
+    "opencv-python-headless>=5.0.0.93",
+    "scenedetect>=0.7.3",
+    "yt-dlp>=2026.10.26",
+]
+
+[project.scripts]
+seqcarto = "seqcarto:main"
+
+[build-system]
+requires = ["uv_build>=0.10.9,<0.11.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+]
+
+[tool.uv]
+python-preference = "only-managed"
