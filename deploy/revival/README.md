@@ -3,8 +3,9 @@
 Runs the unchanged Video Score application (Angular 9 client, Flask 1.0, Celery, PostgreSQL 9.6) in containers.
 
 ```bash
-mkdir -p data/movies && cp <some-video>.mp4 data/movies/
+export HOST_UID=$(id -u) HOST_GID=$(id -g)     # the worker writes into ./data as you
 docker compose -f docker-compose.yml -f deploy/revival/docker-compose.revival.yml up -d --build
+deploy/revival/scripts/make-testclip.sh          # 24 s clip with cuts at frames 150/300/450, or copy own videos into data/movies/
 ```
 
 - App: http://127.0.0.1:8077 · Adminer: http://127.0.0.1:8078 (postgres/postgres, DB `users_dev`) · Flower: http://127.0.0.1:8079
@@ -23,3 +24,7 @@ Changes compared with upstream, all needed to run it in 2026:
 YouTube sources do not work (pafy/youtube-dl are dead).
 
 Verified on 2026-11-10 (macOS arm64, Docker 20.10): a 10-minute clip at 60 fps ran through stripes, 141 cuts, the document and 240 sub-OM images, and the document renders in the client.
+
+Verified on 2026-11-10 on tsv100 (Ubuntu 22.04, x86_64, Docker 29) with `make-testclip.sh`: cuts found exactly at 150/300/450, four document sections with eight sub-OM images.
+
+Known upstream behaviour (kept as is): videos shorter than 1500 frames get no stripe tile; re-running "MAKE DOC AND IMAGES" creates another document.
